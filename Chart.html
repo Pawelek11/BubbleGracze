@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Inne elementy head -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+
+</head>
+<body>
+    <!-- Inne treści strony -->
+    <canvas id="myLineChart" width="400" height="200"></canvas>
+    <script>
+     
+var ctx = document.getElementById("myLineChart").getContext('2d');
+
+fetch('https://api.codetabs.com/v1/proxy?quest=https://bubbleam.pl/players')
+    .then(response => response.json())
+    .then(gracze => {
+
+        //Funkcja milisekundy na datę
+        function convertTimestampToDate(timestamp) {
+           const date = new Date(timestamp);
+            return date.toLocaleString();
+        }
+
+        /*
+        function convertTimestampToDate(timestamp) {
+            const date = new Date(timestamp);
+            return date.toISOString().slice(0, 19).replace('T', ' ');
+        }
+            */
+        //Zbieranie wszystkich unikalnych timestamp
+        const allTimestamps = [...new Set([...gracze['443'].map(item => item[0]), ...gracze["2053"].map(item => item[0]),
+            ...gracze["2083"].map(item => item[0]), ...gracze["2087"].map(item => item[0]),
+            ...gracze["2096"].map(item => item[0]), ...gracze["8443"].map(item => item[0])])].sort();
+       // const allTimestamps = [...new Set([...gracze['443'].map(item => item[0]), ...gracze["2053"].map(item => item[0])])];
+       //  allTimestamps.sort();
+
+
+        //Tablica osi czasu
+        const labels = allTimestamps.map(timestamp => convertTimestampToDate(timestamp));
+        labels.pop();  // Usuwanie niezdefiniowanego czasu(timestampp=0)
+
+        const dataset443 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["443"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        const dataset2053 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["2053"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        const dataset2083 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["2083"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        const dataset2087 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["2087"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        const dataset2096 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["2096"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        const dataset8443 = allTimestamps.map(timestamp => {
+            const dataPoint = gracze["8443"].find(item => item[0] === timestamp);
+            return dataPoint ? dataPoint[1] : null;
+        });
+
+        Chart.defaults.backgroundColor = '#2220F5';
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Gracze MS1',
+                    data: dataset443,
+                    borderColor: 'rgba(255,100,100,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true  //pozwala na przerwy danych
+                },
+                {
+                    label: 'Gracze MS2',
+                    data: dataset2053,
+                    borderColor: 'rgba(100,255,100,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true,
+                    hidden: true,
+                },
+                {
+                    label: 'Gracze HC',
+                    data: dataset2083,
+                    borderColor: 'rgba(100,100,255,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true,
+                    hidden: true,
+                },
+                {
+                    label: 'Gracze Teams',
+                    data: dataset2096,
+                    borderColor: 'rgba(255,255,0,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true,
+                    hidden: true,
+                },
+                {
+                    label: 'Gracze 1vs1',
+                    data: dataset8443,
+                    borderColor: 'rgba(0,255,255,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true,
+                    hidden: true,
+                },
+                {
+                    label: 'Gracze 2vs2',
+                    data: dataset2087,
+                    borderColor: 'rgba(255,0,255,1)',
+                    borderWidth: 2,
+                    fill: false,
+                    spanGaps: true,
+                    hidden: true,
+                }                  
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{/*
+                        type: 'time',
+                        time: {
+                          //  unit: 'minute',
+                         //   tooltipFormat: 'll HH:mm',
+                         //   displayFormats: {
+                           //     minute: 'HH:mm'
+                           // }
+                        },     
+                        time: {
+                            parser: 'YYYY-MM-DD HH:mm:ss',
+                            tooltipFormat: 'll HH:mm',
+                            unit: 'minute',
+                            displayFormats: {
+                                minute: 'HH:mm'
+                            }
+                        },*/
+                        ticks: {
+                            maxTicksLimit: 40
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Czas'
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Wartość'
+                        }
+                    }]
+
+                }
+            }
+
+          /*  options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+*/
+           // ,
+          //  plugins: []
+        });
+    })
+    .catch(error => console.error('Błąd pobierania danych:', error));
+//Chart.defaults.color = '#ffff ff';
+    </script>
+</body>
+</html>
+		
