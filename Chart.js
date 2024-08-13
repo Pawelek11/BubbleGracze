@@ -104,14 +104,12 @@ let myLineChart;
                                 },
                                 pinch: {
                                     enabled: true
-                                }
+                                },
                              /*   pan: {
                                     enabled: true,
                                     mode: 'x'
                                 },*/
-                               // mode: 'xy',
-                               
-                                
+                                mode: 'x',
                             }
                         }
                     }
