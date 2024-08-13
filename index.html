@@ -1,192 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Inne elementy head -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liczba graczy Bubble</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
+    <style>
+        body {
+            display:flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+        }
+        canvas {
+            width: 100% !important;
+            height: 50vh !important;
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+        .button-container {
+            display: flex; /* Ustawia kontener przycisków jako flex */
+            justify-content: center; /* Centruje przyciski w poziomie */
+            margin-top: 20px;
 
+        }
+        .btn {
+            margin: 0 10px;
+            /*padding: 5px 10px;
+            font-size: 16px; */
+            background-color: #f0f0f0;
+            border: 2px solid #aaa;
+            border-radius: 4px;
+        }
+        .top-buttons .btn {
+            font-size: 12px;
+            padding: 3px 5px;
+            /* background-color: #f0f0f0;
+            border: 2px solid #aaa;
+            border-radius: 4px;*/
+        }
+        .bottom-buttons .btn {
+            font-size: 16px;
+            padding: 5px 10px;
+        }
+        .btn.active {
+            background-color: #AAA;
+        }
+    </style>
 </head>
 <body>
-    <!-- Inne treści strony -->
-    <canvas id="myLineChart" width="400" height="200"></canvas>
-    <script>
-     
-var ctx = document.getElementById("myLineChart").getContext('2d');
+    <div class=" button-container top-buttons">
+        <button class="btn" id="MS1">MS1</button>
+        <button class="btn" id="MS2">MS2</button>
+        <button class="btn" id="HC">HC</button>
+        <button class="btn" id="Teams">Teams</button>
+        <button class="btn" id="1vs1">1vs1</button>
+        <button class="btn" id="2vs2">2vs2</button>
+    </div>
 
-fetch('https://api.codetabs.com/v1/proxy?quest=https://bubbleam.pl/players')
-    .then(response => response.json())
-    .then(gracze => {
+    <canvas id="myLineChart" width="400" height="100"></canvas>
 
-        //Funkcja milisekundy na datę
-        function convertTimestampToDate(timestamp) {
-           const date = new Date(timestamp);
-            return date.toLocaleString();
-        }
-
-        /*
-        function convertTimestampToDate(timestamp) {
-            const date = new Date(timestamp);
-            return date.toISOString().slice(0, 19).replace('T', ' ');
-        }
-            */
-        //Zbieranie wszystkich unikalnych timestamp
-        const allTimestamps = [...new Set([...gracze['443'].map(item => item[0]), ...gracze["2053"].map(item => item[0]),
-            ...gracze["2083"].map(item => item[0]), ...gracze["2087"].map(item => item[0]),
-            ...gracze["2096"].map(item => item[0]), ...gracze["8443"].map(item => item[0])])].sort();
-       // const allTimestamps = [...new Set([...gracze['443'].map(item => item[0]), ...gracze["2053"].map(item => item[0])])];
-       //  allTimestamps.sort();
-
-
-        //Tablica osi czasu
-        const labels = allTimestamps.map(timestamp => convertTimestampToDate(timestamp));
-        labels.pop();  // Usuwanie niezdefiniowanego czasu(timestampp=0)
-
-        const dataset443 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["443"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        const dataset2053 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["2053"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        const dataset2083 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["2083"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        const dataset2087 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["2087"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        const dataset2096 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["2096"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        const dataset8443 = allTimestamps.map(timestamp => {
-            const dataPoint = gracze["8443"].find(item => item[0] === timestamp);
-            return dataPoint ? dataPoint[1] : null;
-        });
-
-        Chart.defaults.backgroundColor = '#2220F5';
-        var myLineChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Gracze MS1',
-                    data: dataset443,
-                    borderColor: 'rgba(255,100,100,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true  //pozwala na przerwy danych
-                },
-                {
-                    label: 'Gracze MS2',
-                    data: dataset2053,
-                    borderColor: 'rgba(100,255,100,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true,
-                    hidden: true,
-                },
-                {
-                    label: 'Gracze HC',
-                    data: dataset2083,
-                    borderColor: 'rgba(100,100,255,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true,
-                    hidden: true,
-                },
-                {
-                    label: 'Gracze Teams',
-                    data: dataset2096,
-                    borderColor: 'rgba(255,255,0,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true,
-                    hidden: true,
-                },
-                {
-                    label: 'Gracze 1vs1',
-                    data: dataset8443,
-                    borderColor: 'rgba(0,255,255,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true,
-                    hidden: true,
-                },
-                {
-                    label: 'Gracze 2vs2',
-                    data: dataset2087,
-                    borderColor: 'rgba(255,0,255,1)',
-                    borderWidth: 2,
-                    fill: false,
-                    spanGaps: true,
-                    hidden: true,
-                }                  
-                ]
-            },
-            options: {
-                scales: {
-                    xAxes: [{/*
-                        type: 'time',
-                        time: {
-                          //  unit: 'minute',
-                         //   tooltipFormat: 'll HH:mm',
-                         //   displayFormats: {
-                           //     minute: 'HH:mm'
-                           // }
-                        },     
-                        time: {
-                            parser: 'YYYY-MM-DD HH:mm:ss',
-                            tooltipFormat: 'll HH:mm',
-                            unit: 'minute',
-                            displayFormats: {
-                                minute: 'HH:mm'
-                            }
-                        },*/
-                        ticks: {
-                            maxTicksLimit: 40
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Czas'
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Wartość'
-                        }
-                    }]
-
-                }
-            }
-
-          /*  options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                }
-            }
-*/
-           // ,
-          //  plugins: []
-        });
-    })
-    .catch(error => console.error('Błąd pobierania danych:', error));
-//Chart.defaults.color = '#ffff ff';
-    </script>
-</body>
+    <div class="button-container bottom-buttons ">
+        <button class="btn" id="av1">Average to 1h</button>
+        <button class="btn" id="av2">Average to 2h</button>
+        <button class="btn" id="av3">Average to 3h</button>
+        <button class="btn" id="av4">Average to 4h</button>
+        <button class="btn" id="av6">Average to 6h</button>
+        <button class="btn" id="av12">Average to 12h</button>
+        <button class="btn" id="av24">Average to 24h</button>
+    </div>
+    <script src="Chart.js"></script>
+    </body>
 </html>
-		
