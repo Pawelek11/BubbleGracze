@@ -109,7 +109,7 @@ let myLineChart;
                                     enabled: true,
                                     mode: 'x'
                                 },*/
-                                mode: 'xy',
+                               // mode: 'xy',
                                
                                 
                             }
