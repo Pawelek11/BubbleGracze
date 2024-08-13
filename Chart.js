@@ -82,33 +82,18 @@ let myLineChart;
                         zoom: { 
                             pan: {
                                 enabled: true,
-                                mode: 'x',
-                                //scaleMode: 'y',
-                                //onZoom: function ({ chart }) {
-                               //     console.log('Zoomed:', chart);
-                                //}
+                                mode: 'x'
                             },
                             zoom: { 
                                 wheel: { 
                                       enabled: true,
                                       mode: 'x',
-                                    speed: 0.1,
-                                   
+                                    speed: 0.5,
                                       //sensitivity: 100,
-                                    //  onZoom: function ({ chart }) {
-                                   //   console.log('Zoomed:', chart);
-                               // },
-                                     // onPan: function ({ chart }) {
-                                   //   console.log('Panned:', chart);
-                                   //   }
                                 },
                                 pinch: {
                                     enabled: true
                                 },
-                             /*   pan: {
-                                    enabled: true,
-                                    mode: 'x'
-                                },*/
                                 mode: 'x',
                             }
                         }
