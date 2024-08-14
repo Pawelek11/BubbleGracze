@@ -6,7 +6,6 @@ let playersTeams;
 let players1vs1;
 let players2vs2;
 let currentData;
-let allTimestamps;
 let myLineChart;
 
     fetch('https://api.codetabs.com/v1/proxy?quest=https://bubbleam.pl/players')
@@ -42,10 +41,8 @@ let myLineChart;
                         x: {
                             ticks: {                    //etykiety
                                 maxTicksLimit: 40,
-                                color: (context) => colorOfDay[new Date(context.tick['label']).getDay()],
-                               
+                                color: (context) => colorOfDay[new Date(context.tick['label']).getDay()]
                             },
-                            //type: 'linear'
                         },
                         y: {
                             ticks: {                    //etykiety
@@ -56,7 +53,6 @@ let myLineChart;
                                 text: 'Number of Players'
                             },
                             min: 0
-                           // type: 'linear'
                         }
                     },
                     interaction: {
@@ -81,7 +77,6 @@ let myLineChart;
                                       enabled: true,
                                       mode: 'x',
                                     speed: 0.5,
-                                      //sensitivity: 100,
                                 },
                                 pinch: {
                                     enabled: true
@@ -109,7 +104,7 @@ let myLineChart;
 
 document.getElementById('MS1').classList.add('active');         //oznaczenie przycisku MS1 jako wciśniętego
 
-let hourlyData = {};      //obiekt z godziną i średnią ilością grraczy w tej godzinie
+let hourlyData = {};      //obiekt z godziną i średnią ilością grraczy 
 let Labels2;
 function averagePerHour(numberHourToAverage) {
     hourlyData = {};
@@ -117,13 +112,13 @@ function averagePerHour(numberHourToAverage) {
     let currentHourPlayers = [];
 
     currentData.forEach(entry => {
-        const hourKey = Math.floor(entry[0] / 3600000); // hourKey to całkowita liczba godzin z timestamps
+        const hourKey = Math.floor(entry[0] / 3600000);             // hourKey to całkowita liczba godzin z timestamps
         if (currentHourKey === null) currentHourKey = hourKey;
         if (hourKey - currentHourKey < numberHourToAverage) {
-            currentHourPlayers.push(entry[1]); // Dodajemy liczba graczy do bieżącej godziny
+            currentHourPlayers.push(entry[1]);             // Dodajemy liczba graczy do bieżącej godziny
         }
         else {
-            if (currentHourKey !== null) {      // Jeśli zmienia się godzina, obliczamy średnią dla poprzedniej godziny
+            if (currentHourKey !== null) {          // Jeśli zmienia się godzina, obliczamy średnią dla poprzedniej godziny
                 const totalPlayers = currentHourPlayers.reduce((sum, num) => sum + num, 0);
                 const averagePlayers = totalPlayers / currentHourPlayers.length;
                 hourlyData[currentHourKey] = averagePlayers; // Przechowujemy średnią dla poprzedniej godziny
@@ -220,9 +215,20 @@ function bottomBtnAction(numAvgHour, activeBtn) {
     document.getElementById('av12').addEventListener('click', () => {
         bottomBtnAction(12, 'av12');
     });
+    
+    document.getElementById('avD').addEventListener('click', () => {
+        bottomBtnAction(24, 'avD');
+    });
 
-    document.getElementById('av24').addEventListener('click', () => {
-        bottomBtnAction(24, 'av24');
+    document.getElementById('avW').addEventListener('click', () => {
+        bottomBtnAction(168, 'avW');
+    });
 
+    document.getElementById('avM').addEventListener('click', () => {
+        bottomBtnAction(732, 'avM');
+    });
+
+    document.getElementById('avY').addEventListener('click', () => {
+        bottomBtnAction(8760, 'avY');
     });
 }     //bottom-button
