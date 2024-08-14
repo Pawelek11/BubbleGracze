@@ -8,47 +8,49 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@1.2.1"></script>
     <style>
-        body {
-            display:flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 0;
-            height: 100vh;
-        }
-        canvas {
-            width: 100% !important;
-            height: 50vh !important;
-            margin-top: 20px;
-            margin-right: 20px;
-        }
-        .button-container {
-            display: flex; /* Ustawia kontener przycisków jako flex */
-            justify-content: center; /* Centruje przyciski w poziomie */
-            margin-top: 20px;
+      
+            body {
+                background-color: aliceblue;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+                height: 100vh;
+            }
 
-        }
-        .btn {
-            margin: 0 10px;
-            /*padding: 5px 10px;
-            font-size: 16px; */
-            background-color: #f0f0f0;
-            border: 2px solid #aaa;
-            border-radius: 4px;
-        }
-        .top-buttons .btn {
-            font-size: 12px;
-            padding: 3px 5px;
-            /* background-color: #f0f0f0;
-            border: 2px solid #aaa;
-            border-radius: 4px;*/
-        }
-        .bottom-buttons .btn {
-            font-size: 16px;
-            padding: 5px 10px;
-        }
-        .btn.active {
-            background-color: #AAA;
-        }
+            canvas {
+                width: 100% !important;
+                height: 50vh !important;
+                margin-top: 20px;
+                margin-right: 20px;
+            }
+
+            .button-container {
+                display: flex; /* Ustawia kontener przycisków jako flex */
+                justify-content: center; /* Centruje przyciski w poziomie */
+                margin-top: 20px;
+            }
+
+            .btn {                              /*Przyciski*/
+                margin: 0 8px;
+                background-color: #f0f0f0;
+                border: 2px solid #aaa;
+                border-radius: 4px;
+            }
+
+            .top-buttons .btn {             
+                font-size: 12px;
+                padding: 3px 5px;
+            }
+
+            .bottom-buttons .btn {
+                font-size: 16px;
+                padding: 5px 5px;
+            }
+
+            .btn.active {
+                background-color: #AAA;
+            }
     </style>
 </head>
 <body>
@@ -70,8 +72,13 @@
         <button class="btn" id="av4">Avg to 4h</button>
         <button class="btn" id="av6">Avg to 6h</button>
         <button class="btn" id="av12">Avg to 12h</button>
-        <button class="btn" id="av24">Avg to 24h</button>
+    </div>
+    <div class="button-container bottom-buttons ">
+        <button class="btn" id="avD">Avg to D</button>
+        <button class="btn" id="avW">Avg to W</button>
+        <button class="btn" id="avM">Avg to M</button>
+        <button class="btn" id="avY">Avg to Y</button>
     </div>
     <script src="Chart.js"></script>
-    </body>
+</body>
 </html>
