@@ -194,8 +194,7 @@ function averagePerHour(numberHourToAverage) {
     }
 
     Labels2 = Object.keys(hourlyData).map(hourkey => {        //tworzenie etykiety dla osi x
-        const date = new Date(hourkey * 3600000)
-        return date.toString().slice(0, 21);
+        return new Date(hourkey * 3600000);
     });
 };
 
