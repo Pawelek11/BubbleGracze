@@ -13,12 +13,39 @@ let myLineChart;
         .then(data => {
             playersMS1 = data['443'].sort((a, b) => a[0] - b[0]);
             while (playersMS1[0] === 0) playersMS1.shift();
+
+            const startTimestamp = 1724095608000;           // GMT: Monday, 19 August 2024 19:26:48, moment zmiany formatu danych,
+                                                            // zapisywanie co minutę i tylko wartości różnych od zera
+            
+            function fillMissingMinutes(data, startTimestamp) {         // Funkcja do uzupełniania brakujących minut
+                const filledData = [];
+                let prevTimestamp = null;
+
+                for (const [timestamp, value] of data) {
+                    // Dodaj brakujące minuty przed startTimestamp
+                    if (prevTimestamp !== null && timestamp > startTimestamp) {
+                        // Dodaj brakujące minuty z wartością 0 do startTimestamp
+                        for (let ts = prevTimestamp + 110000; ts < timestamp; ts += 60000) {
+                            filledData.push([ts, 0]);
+                        }
+                    }
+                    // Dodaj aktualny punkt danych
+                    filledData.push([timestamp, value]);
+                    prevTimestamp = timestamp;
+                }
+                return filledData;
+            }       // Funkcja do uzupełniania brakujących minut
+
+            // Przekształcanie danych
+            playersMS1 = fillMissingMinutes(playersMS1, startTimestamp);
+
+            const colorOfDay = ['red', 'yellow', 'pink', 'orange', 'purple', 'green', 'blue', 'red'];
+            
             myLineChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: playersMS1.map(item => new Date(item[0]).toString().slice(0, 21)),     //Oś x MS1
+                    labels: playersMS1.map(item => new Date(item[0])),     //Oś x MS1
                     datasets: [{
-                        //label: 'MS1',
                         data: playersMS1.map(item => item[1]),    //Oś x MS1
                         borderWidth: 1,
                         pointRadius: 0,     // wielkość punktów wartości Y
@@ -40,10 +67,20 @@ let myLineChart;
                     scales: {
                         x: {
                             ticks: {                    //etykiety
-                                maxTicksLimit: 40,
-                                color: (context) => colorOfDay[new Date(context.tick['label']).getDay()]
+                                maxTicksLimit: 30,
+                                color: (context) => colorOfDay[(new Date(context.tick['label']).getDay())+1]
                             },
+                            font: 12,
                         },
+                        type: 'time',
+                        time: {
+                                tooltipFormat: 'dd MMM yyyy HH:mm',         // format wyświetlania w podpowiedzi
+                                displayFormats: {                           // // format wyświetlania etykiet, dobierany automatycznie przez wykres
+                                    day: 'dd MMM yyyy ',
+                                    hour: 'dd MMM yyyy',          // format wyświetlania godzin
+                                    minute: 'dd MMM HH:mm',
+                                },
+                            },
                         y: {
                             ticks: {                    //etykiety
                                 beginAtZero: true,
@@ -68,15 +105,22 @@ let myLineChart;
                             display: false
                         },
                         zoom: { 
+                            limits: {
+                                x: {
+                                    min: 'original', max: 'original', minRange:  6 * 60 * 60 * 1000 // Zakres powiększania, min 6*60*60*1000ms = 6h
+                                }
+                            },
                             pan: {
                                 enabled: true,
                                 mode: 'x',
                             },
                             zoom: { 
+                                
                                 wheel: { 
                                       enabled: true,
                                       mode: 'x',
                                     speed: 0.5,
+                                    sensitivity: 1,
                                 },
                                 pinch: {
                                     enabled: true
@@ -87,18 +131,29 @@ let myLineChart;
                     }
                 }
             });
+            {
             playersMS2 = data['2053'].sort((a, b) => a[0] - b[0]);
             while (playersMS2[0] === 0) playersMS2.shift();
+            playersMS2 = fillMissingMinutes(playersMS2, startTimestamp);
+
             playersHC = data['2083'].sort((a, b) => a[0] - b[0]);
             while (playersHC[0] === 0) playersHC.shift();
+            playersHC = fillMissingMinutes(playersHC, startTimestamp);
+
             playersTeams = data['2096'].sort((a, b) => a[0] - b[0]);
             while (playersTeams[0] < 5) playersTeams.shift();
+            playersTeams = fillMissingMinutes(playersTeams, startTimestamp);
+
             players1vs1 = data['8443'].sort((a, b) => a[0] - b[0]);
             while (players1vs1[0] === 0) players1vs1.shift();
+            players1vs1 = fillMissingMinutes(players1vs1, startTimestamp);
+
             players2vs2 = data['2087'].sort((a, b) => a[0] - b[0]);
             while (players2vs2[0] === 0) players2vs2.shift();
+            players2vs2 = fillMissingMinutes(players2vs2, startTimestamp);
             currentData = playersMS1;
-            const colorOfDay = ['red', 'yellow', 'pink', 'orange', 'purple', 'green', 'blue', 'black'];
+            }  
+            currentData = playersMS1;
         })
     .catch(error => console.error('Błąd pobierania danych:', error));
 
