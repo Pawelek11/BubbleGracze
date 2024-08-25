@@ -82,7 +82,7 @@ let myLineChart;
                                     minute: 'dd MMM HH:mm',
                                 },
                             },
-                        }
+                        },
                         y: {
                             ticks: {                    //etykiety
                                 beginAtZero: true,
