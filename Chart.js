@@ -70,7 +70,9 @@ let myLineChart;
                                 maxTicksLimit: 30,
                                 color: (context) => colorOfDay[(new Date(context.tick['label']).getDay())+1]
                             },
-                            font: 12,
+                            font: {
+                                size: 12
+                            },
                         },
                         type: 'time',
                         time: {
