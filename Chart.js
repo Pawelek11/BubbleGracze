@@ -73,7 +73,6 @@ let myLineChart;
                             font: {
                                 size: 12
                             },
-                        },
                         type: 'time',
                         time: {
                                 tooltipFormat: 'dd MMM yyyy HH:mm',         // format wyświetlania w podpowiedzi
@@ -83,6 +82,7 @@ let myLineChart;
                                     minute: 'dd MMM HH:mm',
                                 },
                             },
+                        }
                         y: {
                             ticks: {                    //etykiety
                                 beginAtZero: true,
