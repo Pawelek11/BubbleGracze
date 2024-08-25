@@ -202,7 +202,7 @@ const topButtons = document.querySelectorAll('.top-buttons .btn');
 const bottomButtons = document.querySelectorAll('.bottom-buttons .btn');
 
 function topBtnAction(players, activeBtn) {
-    myLineChart.data.labels = players.map(item => new Date(item[0]).toString().slice(0, 21));
+    myLineChart.data.labels = players.map(item => new Date(item[0]));
     myLineChart.data.datasets[0].data = players.map(item => item[1]);
     topButtons.forEach(b => b.classList.remove('active'));
     bottomButtons.forEach(b => b.classList.remove('active'));
