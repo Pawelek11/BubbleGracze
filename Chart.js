@@ -39,7 +39,7 @@ let myLineChart;
             // Przekształcanie danych
             playersMS1 = fillMissingMinutes(playersMS1, startTimestamp);
 
-            const colorOfDay = ['red', 'yellow', 'pink', 'orange', 'purple', 'green', 'blue', 'red'];
+            const colorOfDay = ['red', 'yellow', 'pink', 'orange', 'purple', 'green', 'blue'];
             
             myLineChart = new Chart(ctx, {
                 type: 'line',
@@ -68,7 +68,7 @@ let myLineChart;
                         x: {
                             ticks: {                    //etykiety
                                 maxTicksLimit: 30,
-                                color: (context) => colorOfDay[(new Date(context.tick['label']).getDay())+1]
+                                color: (context) => colorOfDay[new Date(context.tick['label']).getDay()]
                             },
                             font: {
                                 size: 12
