@@ -17,25 +17,25 @@ let myLineChart;
             const startTimestamp = 1724095608000;           // GMT: Monday, 19 August 2024 19:26:48, moment zmiany formatu danych,
                                                             // zapisywanie co minutę i tylko wartości różnych od zera
             
-            function fillMissingMinutes(data, startTimestamp) {         // Funkcja do uzupełniania brakujących minut
+           function fillMissingMinutes(data, startTimestamp) {         // Funkcja do uzupełniania brakujących minut
                 const filledData = [];
                 let prevTimestamp = null;
 
-                for (const [timestamp, value] of data) {
-                    // Dodaj brakujące minuty przed startTimestamp
-                    if (prevTimestamp !== null && timestamp > startTimestamp) {
-                        // Dodaj brakujące minuty z wartością 0 do startTimestamp
-                        for (let ts = prevTimestamp + 110000; ts < timestamp; ts += 60000) {
-                            filledData.push([ts, 0]);
-                        }
+                let index = 0;
+                while (data[index][0] < startTimestamp)         //omijamy dane z przed 19.08.2024
+                    index++;
+                prevTimestamp = data[index][0];                 //ust. poprzedni timestamp
+                index++;
+                for (i = index; i < data.length; i++) {
+                    let timestamp = data[index][0];             //ust. timestamp
+                    for (let ts = prevTimestamp + 110000; ts < timestamp; ts += 60000) {    //jeśli różnica prawie dwóch minut
+                        filledData.push([ts, 0]);                                           // to dodajemy minutę z zerem
                     }
-                    // Dodaj aktualny punkt danych
-                    filledData.push([timestamp, value]);
+                    filledData.push([timestamp, data[index][1]]);                           //jeśli nie to przepisujemy dane
                     prevTimestamp = timestamp;
                 }
                 return filledData;
-            }       // Funkcja do uzupełniania brakujących minut
-
+            }
             // Przekształcanie danych
             playersMS1 = fillMissingMinutes(playersMS1, startTimestamp);
 
