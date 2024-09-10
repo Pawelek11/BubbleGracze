@@ -29,7 +29,7 @@ let myLineChart;
                 index++;
                 for (; index < data.length; index++) {
                     let timestamp = data[index][0];             //ust. timestamp
-                    for (let ts = prevTimestamp + 110000; ts < timestamp; ts += 60000) {    //jeśli różnica prawie dwóch minut
+                    for (let ts = prevTimestamp + 60000; (ts+40000) < timestamp; ts += 60000) {    //jeśli różnica 100sekund
                         filledData.push([ts, 0]);                                           // to dodajemy minutę z zerem
                     }
                     filledData.push(data[index]);                           //jeśli nie to przepisujemy dane
